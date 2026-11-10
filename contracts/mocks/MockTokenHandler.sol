@@ -36,7 +36,9 @@ contract MockTokenHandler is StorageLayoutV1 {
         } else {
             token = TokenHandler.getAssetToken(currencyId);
         }
-        return token.transfer(account, currencyId, netTransfer);
+        int256 actualTransfer = token.transfer(account, currencyId, netTransfer);
+        require(netTransfer == 0 || actualTransfer != 0, "Transfer failed");
+        return actualTransfer;
     }
 
     function mint(uint16 currencyId, uint256 underlyingAmount) external payable returns (int256) {
